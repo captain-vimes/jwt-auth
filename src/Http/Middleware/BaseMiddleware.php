@@ -71,7 +71,13 @@ abstract class BaseMiddleware
                 throw new UnauthorizedHttpException('jwt-auth', 'User not found');
             }
         } catch (JWTException $e) {
-            throw new UnauthorizedHttpException('jwt-auth', $e->getMessage(), $e, $e->getCode());
+            if ($e->getMessage() == 'Token has expired') {
+                $newToken = $this->auth->setRequest($request)->parseToken()->refresh();
+                header('Authorization: ' . $newToken);
+                //throw new \Exception('Token has expired', 401);
+            } else {
+                throw new UnauthorizedHttpException('jwt-auth', $e->getMessage(), $e, $e->getCode());
+            }
         }
     }
 
