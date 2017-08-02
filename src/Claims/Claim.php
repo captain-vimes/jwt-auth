@@ -121,7 +121,7 @@ abstract class Claim implements Arrayable, ClaimContract, Jsonable, JsonSerializ
      *
      * @return bool
      */
-    public function validateRefresh()
+    public function validateRefresh($refreshTTL)
     {
         return $this->getValue();
     }
